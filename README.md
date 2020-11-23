@@ -61,7 +61,7 @@ mutate_value: The name of a function that mutates values as they are
    ```yaml
    dependencies:
      recursive_generic:
-       github: your-github-user/recursive_generic
+       github: BrucePerens/recursive_generic
    ```
 
 2. Run `shards install`
@@ -88,10 +88,8 @@ TODO: Write development instructions here
 
 ## Contributors
 
-## Attribution
-- [your-name-here](https://github.com/your-github-user) - creator and maintainer
+- [Bruce Perens](https://github.com/BrucePerens) - creator and maintainer.
 
-Copyright Bruce Perens (@BrucePerens, bruce@perens.com)
 MIT license. Copyright (C) 2000 Algorithmic LLC. In addition, this may
 be a derivative work of the works cited below:
 

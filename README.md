@@ -8,21 +8,26 @@ in the compiler.
 
 `require "recursive_generic"`
 
-Use the `recursive_generic` macro to declare generics which contain
-themselves without use of recursively-defined aliases.
+Use the `recursive_generic` macro to declare generic classes which contain
+themselves without use of recursively-defined aliases. You may then
+instantiate them as you would a normal class.
 ```crystal
 recursive_generic(MyHash, Hash, {Symbol, String|MyHash|Array(MyHash)})
-recursive_generic(MyArray, Array, {String|MyArray|MyHash})
+h = MyHash.new
+h[:itself] = h
 ```
 
 ### Arguments:
 
-name: The name of the new generic class to create.
+name: The name of the new self-containing generic class to create.
 
-generic: The name of the generic class that will be wrapped by our new
-  class. This will be `Array`, `Hash`, etc.
+generic: The name of a generic class that our new one will be based upon.
+  This will be `Array`, `Hash`, etc.
 
-datatype: A tuple containint the type of data in the generic.
+datatype: A tuple containing the type of data that will be stored in the
+  generic. For an `Array` containing `Int32`, this would be `{ Int32 }`. For
+  a `Hash` with `Symbol` typed keys and `String` typed values, this would be
+  `{ Symbol, String }`.
 
 mutate_key: The name of a function that mutates the keys or indices
            in the wrapped generic, and the key or index values used
@@ -46,18 +51,6 @@ mutate_value: The name of a function that mutates values as they are
              key.to_s
            end
            ```
-
-Copyright Bruce Perens (@BrucePerens, bruce@perens.com)
-MIT license. Copyright (C) 2000 Algorithmic LLC. In addition, this may
-be a derivative work of the works cited below:
-
-Thanks for lessons from:
-* Ary Borenszweig (@asterite) explained the way to implement this
-  in https://github.com/crystal-lang/crystal/issues/5155
-* Sijawusz Pur Rahnama (@sija) and his `any_hash` shard.
-* Johannes Müller (@straight-shoota) and his `crinja` shard.
-* The Crystal stdlib implementation of the wrapped types, for the API
-  of the various generic classes.
 
 ## Installation
 
@@ -93,4 +86,18 @@ TODO: Write development instructions here
 
 ## Contributors
 
+## Attribution
 - [your-name-here](https://github.com/your-github-user) - creator and maintainer
+
+Copyright Bruce Perens (@BrucePerens, bruce@perens.com)
+MIT license. Copyright (C) 2000 Algorithmic LLC. In addition, this may
+be a derivative work of the works cited below:
+
+Thanks for lessons from:
+* Ary Borenszweig (@asterite) explained the way to implement this
+  in https://github.com/crystal-lang/crystal/issues/5155
+* Sijawusz Pur Rahnama (@sija) and his `any_hash` shard.
+* Johannes Müller (@straight-shoota) and his `crinja` shard.
+* The Crystal stdlib implementation of the wrapped types, for the API
+  of the various generic classes.
+

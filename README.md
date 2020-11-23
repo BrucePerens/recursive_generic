@@ -4,7 +4,7 @@ Implementation of a pseudo-generic that contains itself without use of
 recursively-defined aliases, which are problematical and/or broken
 in the compiler.
 
-## USage
+## Usage
 
 `require "recursive_generic"`
 

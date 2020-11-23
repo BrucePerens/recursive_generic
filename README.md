@@ -1,5 +1,7 @@
 # recursive_generic
 
+WARNING - THIS IS UNDER DEVELOPMENT, NOT READY FOR YOU TO USE.
+
 Implementation of a pseudo-generic that contains itself without use of
 recursively-defined aliases, which are problematical and/or broken
 in the compiler.

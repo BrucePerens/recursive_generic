@@ -4,6 +4,10 @@ Implementation of a pseudo-generic that contains itself without use of
 recursively-defined aliases, which are problematical and/or broken
 in the compiler.
 
+## USage
+
+`require "recursive_generic"`
+
 Use the `recursive_generic` macro to declare generics which contain
 themselves without use of recursively-defined aliases.
 ```crystal
@@ -11,9 +15,15 @@ recursive_generic(MyHash, Hash, {Symbol, String|MyHash|Array(MyHash)})
 recursive_generic(MyArray, Array, {String|MyArray|MyHash})
 ```
 
-name: The name of the new generic object.
+### Arguments:
+
+name: The name of the new generic class to create.
+
+generic: The name of the generic class that will be wrapped by our new
+  class. This will be `Array`, `Hash`, etc.
+
 datatype: A tuple containint the type of data in the generic.
-#
+
 mutate_key: The name of a function that mutates the keys or indices
            in the wrapped generic, and the key or index values used
            to query the wrapped generic. It takes the given key or index as
@@ -25,7 +35,7 @@ mutate_key: The name of a function that mutates the keys or indices
              key.to_s
            end
            ```
-#
+
 mutate_value: The name of a function that mutates values as they are
            inserted in the generic. It takes the given value as
            its argument, and returns the mutated value. So, for example,

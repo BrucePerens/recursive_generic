@@ -8,9 +8,9 @@ module RecursiveGeneric::GenericWrapper(T, WrappedGeneric, WrappedValue)
   @contained = WrappedGeneric.new
 
   delegate("[]=",   to: @contained, wrap: :key_value)
-  delegate("[]",    to: @contained, wrap: :key, result: :unwrap)
-  delegate("[]?",   to: @contained, wrap: :key, result: :unwrap)
-  delegate clear,   to: @contained, result: :self
+  delegate("[]",    to: @contained, wrap: :key, return: :unwrap)
+  delegate("[]?",   to: @contained, wrap: :key, return: :unwrap)
+  delegate clear,   to: @contained, return: :self
   delegate size,    to: @contained # Faster than the one in Enumerable.
 
   def each

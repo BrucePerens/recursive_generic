@@ -9,27 +9,38 @@ module RecursiveGeneric::Delegate(ValueWrapper)
   #     mutate_key(), the second in our value-wrapper struct.
   #   :uwrap : unwrap the first positional argument from our value-wrapper
   #     struct, by passing it as `argument.value`.
+  #   The default is to pass on all arguments without modification.
+  #   Named arguments are passed on without modification except when
+  #   `form: :one_argument` is set (see below).
   #
-  #   The default is to pass on all arguments unmodified.
-  #   Named arguments are passed on unmodified.
-  #
-
-  #
-  # result: This named argument can be:
+  # return: This named argument can be:
   #   :unwrap : unwrap the returned value from our value-wrapper struct.
   #   :self :   return `self`.
-  #
   #   The default is to return the unmodified value of the delegated method.
+  #   (The method to declare keywords like `return` as argument names is
+  #   documented under
+  #   https://crystal-lang.org/reference/syntax_and_semantics/default_values_named_arguments_splats_tuples_and_overloading.html#external-names )
   #
-  macro delegate(method, to, wrap = false, unwrap = false, result = false, one_argument = false)
+  # form: This named argument can be:
+  #   :one_argument : This is used when delegating the 
+  #     operators `==`, `===`, `<=`, `>=`, `<=>`, and `!=`. The compiler
+  #     insists that they be declared with only one argument, while the
+  #     normal method of delegation declares delegated methods with
+  #     (*positional_arguments, **named_arguments) as their argument list
+  #     so that all positional and named arguments can be passed on to the
+  #     delegate method. When `form: :one_argument` is used, the argument
+  #     list of the declared method will take only one argument, and not
+  #     pass on any named arguments.
+  #
+  macro delegate(method, to, wrap = nil, unwrap = nil, return result = nil, form = nil)
     {% begin %}
-    {% if one_argument %}
+    {% if form == :one_argument %}
       {% arguments = "arg" %}
     {% else %}
       {% arguments = "*args, **named_args" %}
     {% end %}
     def {{method.id}}({{arguments.id}})
-      {% if one_argument %}
+      {% if form == :one_argument %}
         args = { arg }
       {% end %}
       {% if wrap == :key || wrap == :index %}

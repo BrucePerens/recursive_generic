@@ -13,10 +13,10 @@ struct RecursiveGeneric::ValueWrapperGeneric(ValueType)
     @value = mutate_value(n)
   end
 
-  delegate("==",  to: @value, wrap: :unwrap, form: :one_argument)
-  delegate("===", to: @value, wrap: :unwrap, form: :one_argument)
-  delegate("<=",  to: @value, wrap: :unwrap, form: :one_argument)
-  delegate(">=",  to: @value, wrap: :unwrap, form: :one_argument)
-  delegate("<=>", to: @value, wrap: :unwrap, form: :one_argument)
-  delegate("!=",  to: @value, wrap: :unwrap, form: :one_argument)
+  delegate "==",  to: @value, wrap: :unwrap, form: :one_argument
+  delegate "===", to: @value, wrap: :unwrap, form: :one_argument
+  delegate "<=",  to: @value, wrap: :unwrap, form: :one_argument
+  delegate ">=",  to: @value, wrap: :unwrap, form: :one_argument
+  delegate "<=>", to: @value, wrap: :unwrap, form: :one_argument
+  delegate "!=",  to: @value, wrap: :unwrap, form: :one_argument
 end

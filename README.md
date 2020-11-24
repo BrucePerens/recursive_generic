@@ -180,12 +180,14 @@ a way to write this quickly, consistently, and readably.
 
     The default is that all arguments are passed on to the delegate method.
 
-### Delegating methods with blocks.
+### Delegating methods with blocks or odd arguments.
 
 Alas, the extended `delegate` method doesn't work for methods that expect
-to be passed a block. Thus, you must write those methods. Continuing the
-example above, this implements `Array#sort` and `Array#map` for
-`MyRecursiveArray`, returning a new `MyRecursiveArray` instance containing
+to be passed a block, or anything requiring argument or return processing
+not provided by the extended `delegate` method. Thus, you must write those
+methods.
+Continuing the example above, this implements `Array#sort` and `Array#map`
+for `MyRecursiveArray`, returning a new `MyRecursiveArray` instance containing
 the sorted or mapped class.
 
 We will have to wrap newly-created generics in our new class.

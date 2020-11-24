@@ -20,9 +20,9 @@ h[:itself] = h
 ```
 
 This works by wrapping the value stored in the generic in a struct
-`ValueWrapper(Types)` that itself contains the specified types, and wrapping
-the generic in a new class which includes `GenericWrapper(...)`, which handles
-wrapping and unwrapping of values.
+`ValueWrapper` that itself contains the specified types, and wrapping
+the generic in a new class which includes `GenericWrapper(...)`, which
+handles wrapping and unwrapping of values.
 
 The code presently assumes that the wrapped generic implements the methods of
 `Iterable` and `Enumerable` (usually by including them) and that the value
@@ -82,7 +82,7 @@ You will have to write delegation of additional methods of the wrapped generic
 this trivial: you will mostly just have to invoke `delegate` for each method,
 rather the writing a method body.
 
-Most delegated methods will involve wrapping values in `ValueWrapper(Types)`
+Most delegated methods will involve wrapping values in `ValueWrapper`
 or unwrapping the returned value. Thus, there is an extended `delegate`
 method which you can access by including `RecursiveWrapper::Delegate`.
 
@@ -103,7 +103,7 @@ The user has used `recursive_generic` to create `MyRecursiveArray`, wrapping
 the `Array` generic type. The wrapped generic is always assigned to
 `@contained`. The code below re-opens the `MyRecursiveArray` class,
 and adds a delegate for `Array#push`, wrapping the value in
-`ValueWrapper(Types)` and then passing it to the wrapped `Array`; and
+`ValueWrapper` and then passing it to the wrapped `Array`; and
 a delegate for `Array#pop`, unwrapping the returned value.
 ```crystal
 class MyRecursiveArray
@@ -116,7 +116,7 @@ This actually generates this code for the user:
 ```crystal
 class MyRecursiveArray
   def push(*arguments, **named_arguments)
-    @contained.push(ValueWrapper(Types).new(arguments[0], **named_arguments)
+    @contained.push(ValueWrapper.new(arguments[0], **named_arguments)
   end
 
   def pop(*arguments, **named_arguments)
@@ -126,8 +126,9 @@ end
 ```
 
 So, we can see from this example that wrapping a value means creating a new
-`ValueWrapper(Types)` to contain it, and extracting the wrapped value means
-calling `ValueWrapper(Types)#value`.
+`ValueWrapper` to contain it, and extracting the wrapped value means
+calling `ValueWrapper#value`. The extended `delegate` method provides
+a way to write this quickly, consistently, and readably.
 
 ### Arguments
 
@@ -135,10 +136,10 @@ calling `ValueWrapper(Types)#value`.
 
   - **:key** or **:index** : wrap one positional (not named) argument in mutate_key().
 
-  - **:value** : wrap one positional argument in `ValueWrapper(Types)`.
+  - **:value** : wrap one positional argument in `ValueWrapper`.
 
   - **:key_value** : wrap two positional arguments. The first is wrapped in
-    `#mutate_key()`, the second in `ValueWrapper(Types)`.
+    `#mutate_key()`, the second in `ValueWrapper`.
 
   - **:uwrap** : unwrap the first positional argument from our value-wrapper
     struct, by passing it as `argument.value`.
@@ -180,8 +181,8 @@ to be passed a block. Thus, you must write those methods. Continuing the
 example above, this implements `Array#sort` for `MyRecursiveArray`, returning
 a new `MyRecursiveArray` instance containing the sorted class. We don't
 have to do anything about the fact that `Array#sort` is sorting
-`ValueWrapper(Types)` values rather than the types wrapped by `ValueWrapper`,
-since `ValueWrapper(Types)` already has a delegate for the `<=>` method
+`ValueWrapper` values rather than the types wrapped by `ValueWrapper`,
+since `ValueWrapper` already has a delegate for the `<=>` method
 used by `Array#sort`.
 
 ```crystal
@@ -191,6 +192,10 @@ class MyRecursiveArray
   end
 end
 ```
+
+`self.class.new` is used to remind us that we are creating another instance
+of the current object, and that code will continue to work even if you change
+the name of `MyRecursiveArray`.
 
 ## Installation
 

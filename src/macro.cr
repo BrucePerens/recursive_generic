@@ -51,7 +51,7 @@ macro recursive_generic(name, generic, datatype, mutate_key = nop, mutate_value 
   # that it can contain itself.
   class {{name.id}}
     # This is the value wrapper. The generic will contain this type.
-    alias ValueWrapper = {{"RecursiveGeneric::ValueWrapper(#{datatype.last.id})".id}}
+    alias ValueWrapper = {{"RecursiveGeneric::ValueWrapperGeneric(#{datatype.last.id})".id}}
 
     # The type arguments to the wrapped generic come from the `datatype`
     # tuple, except that the last type specified is wrapped in our value

@@ -1,4 +1,4 @@
-struct RecursiveGeneric::ValueWrapper(ValueType)
+struct RecursiveGeneric::ValueWrapperGeneric(ValueType)
   include Delegate(self)
   @value : ValueType
 

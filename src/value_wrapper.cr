@@ -1,4 +1,5 @@
 struct RecursiveGeneric::ValueWrapper(ValueType)
+  include Delegate(self)
   @value : ValueType
 
   def initialize(@value)
@@ -11,4 +12,11 @@ struct RecursiveGeneric::ValueWrapper(ValueType)
   def value=(n)
     @value = mutate_value(n)
   end
+
+  delegate("==",  to: @value, wrap: :unwrap, one_argument: true)
+  delegate("===", to: @value, wrap: :unwrap, one_argument: true)
+  delegate("<=",  to: @value, wrap: :unwrap, one_argument: true)
+  delegate(">=",  to: @value, wrap: :unwrap, one_argument: true)
+  delegate("<=>", to: @value, wrap: :unwrap, one_argument: true)
+  delegate("!=",  to: @value, wrap: :unwrap, one_argument: true)
 end

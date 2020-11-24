@@ -51,23 +51,23 @@ macro recursive_generic(name, generic, datatype, mutate_key = nop, mutate_value 
   # that it can contain itself.
   class {{name.id}}
     # This is the value wrapper. The generic will contain this type.
-    private alias VW = {{"RecursiveGeneric::ValueWrapper(#{datatype.last.id})".id}}
+    alias ValueWrapper = {{"RecursiveGeneric::ValueWrapper(#{datatype.last.id})".id}}
 
     # The type arguments to the wrapped generic come from the `datatype`
     # tuple, except that the last type specified is wrapped in our value
     # wrapper.
-    {% generic_arguments = ((datatype)[0..-2] + ["VW".id]).splat.id %}
+    {% generic_arguments = ((datatype)[0..-2] + ["ValueWrapper".id]).splat.id %}
 
     # This brings in the methods of our generic-wrapper class. They
     # are mostly concerned with wrapping values in the value-wrapper before
     # they are put in the wrapped generic, and extracting the values from
     # the wrapper when they are queried from the generic.
-    {{ "include RecursiveGeneric::GenericWrapper(#{datatype.id}, #{generic.id}(#{generic_arguments.id}), VW)".id }}
+    {{ "include RecursiveGeneric::GenericWrapper(#{datatype.id}, #{generic.id}(#{generic_arguments.id}), ValueWrapper)".id }}
 
     # `RecursiveGeneric:<Type>Methods(ValueWrapper)` contains methods that are
     # specific to a particular wrapped generic. For example, methods
     # for `Hash` are in RecursiveWrapper::HashMethods(ValueWrapper)`.
-    {% type_specific_module = "#{generic}Methods(VW)".id %}
+    {% type_specific_module = "#{generic}Methods(ValueWrapper)".id %}
     {{ "module RecursiveGeneric::#{type_specific_module.id} end".id }}
     {{ "include RecursiveGeneric::#{type_specific_module.id}".id }}
 

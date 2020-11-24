@@ -1,27 +1,17 @@
 module RecursiveGeneric::GenericWrapper(T, WrappedGeneric, WrappedValue)
   include Enumerable(T)
   include Iterable(T)
-  include Delegate
+  include Delegate(WrappedValue)
   include ExtractValue
   include Mutate
 
   @contained = WrappedGeneric.new
 
-  def []=(key, value)
-    @contained[mutate_key(key)] = WrappedValue.new(mutate_value(value))
-  end
-
-  def [](key)
-    v = @contained[mutate_key(key)]
-  end
-
-  def []?(key)
-    @contained[mutate_key(key)]?
-  end
-
-  # Delegate the `clear` method to the wrapped generic, but return self
-  # instead of the wrapped generic.
-  delegate_but_return_self clear, to: @contained
+  delegate("[]=",   to: @contained, wrap: :key_value)
+  delegate("[]",    to: @contained, wrap: :key, result: :unwrap)
+  delegate("[]?",   to: @contained, wrap: :key, result: :unwrap)
+  delegate clear,   to: @contained, result: :self
+  delegate size,    to: @contained # Faster than the one in Enumerable.
 
   def each
     WrappedValue::Iterator.new(@contained.each)
@@ -33,8 +23,4 @@ module RecursiveGeneric::GenericWrapper(T, WrappedGeneric, WrappedValue)
       yield *extract_value(*v)
     end
   end
-
-  # Override the version of `size` in Enumerable, the one in the underlying
-  # generic is faster.
-  delegate size, to: @contained
 end

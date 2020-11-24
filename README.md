@@ -201,6 +201,10 @@ class MyRecursiveArray
     self.class.new(@contained.sort { |a, b| yield a, b })
   end
 
+  def sort! # In-place, so don't create new object.
+    @contained.sort! { |a, b| yield a, b }
+  end
+
   def map
     self.class.new(@contained.map do |data|
       ValueWrapper.new(yield data.value)

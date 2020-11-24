@@ -131,6 +131,13 @@ a way to write this quickly, consistently, and readably.
 ### Arguments
 
 **delegate**(*method*, *to*, *wrap*=nil, *return*=nil, *form*=nil)
+
+- **method:** The name of the method to be delegated. Quotes are usually
+  not required, but can be used for method names that would not parse
+  otherwise, like `[]=`.
+
+- **to:** The object that the method will be delegated to.
+
 - **wrap:** This named argument can be:
 
   - **:key** or **:index** : wrap one positional (not named) argument in mutate_key().

@@ -144,7 +144,7 @@ a way to write this quickly, consistently, and readably.
 
   - **:value** : wrap one positional argument in `ValueWrapper`.
 
-  - **:key_value** : wrap two positional arguments. The first is wrapped in
+  - **:key_value** or **index_value** : wrap two positional arguments. The first is wrapped in
     `#mutate_key()`, the second in `ValueWrapper`.
 
   - **:uwrap** : unwrap the first positional argument from our value-wrapper
@@ -160,7 +160,8 @@ a way to write this quickly, consistently, and readably.
 
   - **:self** :   return `self`.
 
-  The default is to return the unmodified value of the delegated method.
+  The default is to return the unmodified value returned by the delegated
+  method.
 
   (The method to declare keywords like `return` as argument names is
   documented under

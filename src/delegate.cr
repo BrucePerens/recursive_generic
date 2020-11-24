@@ -47,7 +47,7 @@ module RecursiveGeneric::Delegate(ValueWrapper)
         value = {{to.id}}.{{method.id}}(mutate_key(args[0]), **named_args)
       {% elsif wrap == :value %}
         value = {{to.id}}.{{method.id}}(ValueWrapper.new(args[0]), **named_args)
-      {% elsif wrap == :key_value %}
+      {% elsif wrap == :key_value || wrap == :index_value %}
         value = {{to.id}}.{{method.id}}(mutate_key(args[0]), ValueWrapper.new(args[1]), **named_args)
       {% elsif wrap == :unwrap %}
         value = {{to.id}}.{{method.id}}(args[0].value, **named_args)

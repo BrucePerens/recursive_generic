@@ -19,6 +19,14 @@ h = MyHash.new
 h[:itself] = h
 ```
 
+This works by wrapping the value stored in the generic in a struct that itself
+contains the specified types, and wrapping the generic in a class that handles
+wrapping and unwrapping of values.
+
+The code presently assumes that the wrapped generic implements the methods of
+`Iterable` and `Enumerable` (usually by including them) and that the value
+implements the methods of `Comparable`.
+
 ### Arguments:
 
 name: The name of the new self-containing generic class to create.
@@ -53,6 +61,48 @@ mutate_value: The name of a function that mutates values as they are
              key.to_s
            end
            ```
+
+## Utilities
+
+Although this shard contains delegation methods for common generics, you may
+have to write new ones for a generic that isn't yet supported by this shard.
+Thus, there is an extended `delegate` method which you can access by
+including `RecursiveWrapper::Delegate`.
+
+# Delegate a method. This has additional options over the normal version
+# of `delegate`. It doesn't work with blocks.
+#
+# wrap: This named argument can be:
+#   :key or :index : wrap one positional (not named) argument in mutate_key().
+#   :value : wrap one positional argument in our value-wrapper struct.
+#   :key_value : wrap two positional arguments. The first is wrapped in
+#     mutate_key(), the second in our value-wrapper struct.
+#   :uwrap : unwrap the first positional argument from our value-wrapper
+#     struct, by passing it as `argument.value`.
+#   The default is to pass on all arguments without modification.
+#   Named arguments are passed on without modification except when
+#   `form: :one_argument` is set (see below).
+#
+# return: This named argument can be:
+#   :unwrap : unwrap the returned value from our value-wrapper struct.
+#   :self :   return `self`.
+#   The default is to return the unmodified value of the delegated method.
+#   (The method to declare keywords like `return` as argument names is
+#   documented under
+#   https://crystal-lang.org/reference/syntax_and_semantics/default_values_named_arguments_splats_tuples_and_overloading.html#external-names )
+#
+# form: This named argument can be:
+#   :one_argument : This is used when delegating the 
+#     operators `==`, `===`, `<=`, `>=`, `<=>`, and `!=`. The compiler
+#     insists that they be declared with only one argument, while the
+#     normal method of delegation declares delegated methods with
+#     (*positional_arguments, **named_arguments) as their argument list
+#     so that all positional and named arguments can be passed on to the
+#     delegate method. When `form: :one_argument` is used, the argument
+#     list of the declared method will take only one argument, and not
+#     pass on any named arguments.
+#
+macro delegate(method, to, wrap = nil, unwrap = nil, return result = nil, form = nil)
 
 ## Installation
 

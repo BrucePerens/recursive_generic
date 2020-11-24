@@ -1,4 +1,3 @@
-# TODO: Write documentation for `RecursiveGeneric`
 module RecursiveGeneric
 end
 require "./mutate"

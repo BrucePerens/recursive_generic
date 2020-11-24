@@ -152,16 +152,16 @@ TODO: Write development instructions here
 
 ## Contributors
 
-- [Bruce Perens](<bruce@perens.com>, <@BrucePerens> <https://github.com/BrucePerens>) - creator and maintainer.
+- [Bruce Perens](<bruce@perens.com>, @BrucePerens, <https://github.com/BrucePerens>) - creator and maintainer.
 
 MIT license. Copyright (C) 2000 Algorithmic LLC. In addition, this may
 be a derivative work of the works cited below:
 
 Thanks for lessons from:
-* Ary Borenszweig (<@asterite>) explained the way to implement this
+* Ary Borenszweig (@asterite) explained the way to implement this
   in https://github.com/crystal-lang/crystal/issues/5155
-* Sijawusz Pur Rahnama (<@sija>) and his `any_hash` shard.
-* Johannes Müller (<@straight-shoota>) and his `crinja` shard.
+* Sijawusz Pur Rahnama (@sija) and his `any_hash` shard.
+* Johannes Müller (@straight-shoota) and his `crinja` shard.
 * The Crystal stdlib implementation of the wrapped types, for the API
   of the various generic classes.
 

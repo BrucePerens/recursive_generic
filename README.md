@@ -65,7 +65,8 @@ implements the methods of `Comparable`.
 
 ## Writing Delegation for the Wrapped Generic
 
-If you are wrapping `Array` or `Hash`, you won't have to read this.
+*If you are wrapping `Array` or `Hash`, you won't have to read this. All of the
+work below has been done for you.*
 
 The generic is wrapped in a new class with a name you specify as the first
 argument to `recursive_generic`. This class includes `GenericWrapper(...)`.
@@ -178,24 +179,39 @@ a way to write this quickly, consistently, and readably.
 
 Alas, the extended `delegate` method doesn't work for methods that expect
 to be passed a block. Thus, you must write those methods. Continuing the
-example above, this implements `Array#sort` for `MyRecursiveArray`, returning
-a new `MyRecursiveArray` instance containing the sorted class. We don't
-have to do anything about the fact that `Array#sort` is sorting
+example above, this implements `Array#sort` and `Array#map` for
+`MyRecursiveArray`, returning a new `MyRecursiveArray` instance containing
+the sorted or mapped class.
+
+We will have to wrap newly-created generics in our new class.
+We don't have to do anything about the fact that `Array#sort` is sorting
 `ValueWrapper` values rather than the types wrapped by `ValueWrapper`,
 since `ValueWrapper` already has a delegate for the `<=>` method
-used by `Array#sort`.
+used by `Array#sort`. But we *do* have to unwrap and wrap the data for
+`Array#map`.
 
 ```crystal
 class MyRecursiveArray
   def sort
-    self.class.new(@contained.sort { yield })
+    self.class.new(@contained.sort { |a, b| yield a, b })
+  end
+
+  def map
+    self.class.new(@contained.map do |data|
+      { ValueWrapper.new(yield data.value) }
+    end)
   end
 end
 ```
 
 `self.class.new` is used to remind us that we are creating another instance
-of the current object, and that code will continue to work even if you change
+of the current object, and code written that way will continue to work even
+if you change
 the name of `MyRecursiveArray`.
+
+In the `map` method above, we are unwrapping
+the wrapped data using `data.value`. The data is then passed
+to the block. Then we wrap the block's result in `ValueWrapper.new()`.
 
 ## Installation
 

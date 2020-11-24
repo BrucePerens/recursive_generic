@@ -30,7 +30,7 @@ implements the methods of `Comparable`.
 
 ### Arguments:
 
-recursive_generic(*name*, *generic*, *datatype*, *mutate_key*=no-operation, *mutate_value*=no-operation)
+**recursive_generic**(*name*, *generic*, *datatype*, *mutate_key*=no-operation, *mutate_value*=no-operation)
 
 - **name:** The name of the new self-containing generic class to create.
 
@@ -130,7 +130,7 @@ a way to write this quickly, consistently, and readably.
 
 ### Arguments
 
-delegate(*method*, *to*, *wrap*=nil, *return*=nil, *form*=nil)
+**delegate**(*method*, *to*, *wrap*=nil, *return*=nil, *form*=nil)
 - **wrap:** This named argument can be:
 
   - **:key** or **:index** : wrap one positional (not named) argument in mutate_key().

@@ -100,7 +100,7 @@ The user has used `recursive_generic` to create `MyRecursiveArray`, wrapping
 the `Array` generic type. The wrapped generic is always assigned to
 `@contained`. The code below re-opens the `MyRecursiveArray` class,
 and adds a delegate for `Array#push`, wrapping the value in
-`ValueWrapper(Types)` and then passing it to the wrapped `Array`, and
+`ValueWrapper(Types)` and then passing it to the wrapped `Array`; and
 a delegate for `Array#pop`, unwrapping the returned value.
 ```crystal
 class MyRecursiveArray
@@ -150,6 +150,8 @@ end
     delegate method. When `form: :one_argument` is used, the argument
     list of the delegated method will take only one argument, and not
     pass on any named arguments.
+
+    The default is that all arguments are passed on to the delegate method.
 
 ## Installation
 

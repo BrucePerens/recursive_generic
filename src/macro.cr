@@ -62,7 +62,7 @@ macro recursive_generic(name, generic, datatype, mutate_key = nop, mutate_value 
     # are mostly concerned with wrapping values in the value-wrapper before
     # they are put in the wrapped generic, and extracting the values from
     # the wrapper when they are queried from the generic.
-    {{ "include RecursiveGeneric::GenericWrapper(#{datatype.id}, #{generic.id}(#{generic_arguments.id}), ValueWrapper)".id }}
+    {{ "include RecursiveGeneric::GenericWrapper(#{datatype.id}, #{generic.id}(#{generic_arguments.id}))".id }}
 
     # `RecursiveGeneric:<Type>Methods(ValueWrapper)` contains methods that are
     # specific to a particular wrapped generic. For example, methods

@@ -1,7 +1,7 @@
-module RecursiveGeneric::GenericWrapper(T, WrappedGeneric, WrappedValue)
+module RecursiveGeneric::GenericWrapper(T, WrappedGeneric)
   include Enumerable(T)
   include Iterable(T)
-  include Delegate(WrappedValue)
+  include Delegate(ValueWrapper)
   include ExtractValue
   include Mutate
 
@@ -14,7 +14,7 @@ module RecursiveGeneric::GenericWrapper(T, WrappedGeneric, WrappedValue)
   delegate size,    to: @contained # Faster than the one in Enumerable.
 
   def each
-    WrappedValue::Iterator.new(@contained.each)
+    ValueWrapper::Iterator.new(@contained.each)
   end
 
   def each(&block)

@@ -98,9 +98,10 @@ to support wrapping generics that aren't already supported in this shard.
 
 The user has used `recursive_generic` to create `MyRecursiveArray`, wrapping
 the `Array` generic type. The wrapped generic is always assigned to
-`@contained`. The code below delegates `Array#push`, wrapping the value in
+`@contained`. The code below re-opens the `MyRecursiveArray` class,
+and adds a delegate for `Array#push`, wrapping the value in
 `ValueWrapper(Types)` and then passing it to the wrapped `Array`, and
-`Array#pop`, unwrapping the returned value.
+a delegate for `Array#pop`, unwrapping the returned value.
 ```crystal
 class MyRecursiveArray
   delegate push, to: @contained, wrap: :value

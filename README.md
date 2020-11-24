@@ -75,12 +75,9 @@ wrapped generic.
 For *any* wrapped generic, all of the methods of `Iterable` and `Enumerable`,
 and `[]`, `[]?`, `[]=`, `clear`, `each`, and `size` are implemented for you.
 You will have to write delegation of additional methods of the wrapped generic
-which you intend to use. An extended `delegate` method is provided to make this
-trivial: you will mostly just have to invoke `delegate` for each method,
+*which you intend to use*. An extended `delegate` method is provided to make
+this trivial: you will mostly just have to invoke `delegate` for each method,
 rather the writing a method body.
-
-You need not implement the exhaustive API of the wrapped generic, but only
-the methods you intend to use.
 
 Most delegated methods will involve wrapping values in `ValueWrapper(Types)`
 or unwrapping the returned value. Thus, there is an extended `delegate`

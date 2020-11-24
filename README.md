@@ -98,7 +98,7 @@ of `delegate`. It doesn't work with blocks.
 
   - **:unwrap** : unwrap the returned value from our value-wrapper struct.
 
-  **:self** :   return `self`.
+  - **:self** :   return `self`.
 
   The default is to return the unmodified value of the delegated method.
 
@@ -111,11 +111,11 @@ of `delegate`. It doesn't work with blocks.
   - **:one_argument** : This is used when delegating the 
     operators `==`, `===`, `<=`, `>=`, `<=>`, and `!=`. The compiler
     insists that they be declared with only one argument, while the
-    normal method of delegation declares delegated methods with
-    (*positional_arguments, **named_arguments) as their argument list
+    normal method of delegation declares delegated methods as
+    `delegated_method(*positional_arguments, **named_arguments)`
     so that all positional and named arguments can be passed on to the
     delegate method. When `form: :one_argument` is used, the argument
-    list of the declared method will take only one argument, and not
+    list of the delegated method will take only one argument, and not
     pass on any named arguments.
 
 ## Installation

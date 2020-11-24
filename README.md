@@ -19,8 +19,9 @@ h = MyHash.new
 h[:itself] = h
 ```
 
-This works by wrapping the value stored in the generic in a struct that itself
-contains the specified types, and wrapping the generic in a class that handles
+This works by wrapping the value stored in the generic in a struct
+`ValueWrapper(Types)` that itself contains the specified types, and wrapping
+the generic in a new class which includes `GenericWrapper(...)`, which handles
 wrapping and unwrapping of values.
 
 The code presently assumes that the wrapped generic implements the methods of
@@ -40,41 +41,75 @@ implements the methods of `Comparable`.
   `{ Symbol, String }`.
 
 - **mutate_key:** The name of a function that mutates the keys or indices
-           in the wrapped generic, and the key or index values used
-           to query the wrapped generic. It takes the given key or index as
-           its argument, and returns the mutated key or index. So, for
-           example, this function would make all of the keys strings as
-           they are inserted in a hash.
-           ```crystal
-           def mutate(key)
-             key.to_s
-           end
-           ```
+  in the wrapped generic, and the key or index values used
+  to query the wrapped generic. It takes the given key or index as
+  its argument, and returns the mutated key or index. So, for
+  example, this function would make all of the keys strings as
+  they are inserted in a `Hash`.
+  ```crystal
+  def mutate(key)
+    key.to_s
+  end
+  ```
 
 - **mutate_value:** The name of a function that mutates values as they are
-           inserted in the generic. It takes the given value as
-           its argument, and returns the mutated value. So, for example,
-           this function would make all of the values strings as they
-           are inserted in a hash:
-           ```crystal
-           def mutate(key)
-             key.to_s
-           end
-           ```
+  inserted in the generic. It takes the given value as
+  its argument, and returns the mutated value. So, for example,
+  this function would make all of the values strings as they
+  are inserted in a generic:
+  ```crystal
+  def mutate(value)
+    value.to_s
+  end
+  ```
 
-## Utilities
+## Writing Delegation for the Wrapped Generic
 
-Although this shard contains delegation methods for common generics, you may
-have to write new ones for a generic that isn't yet supported by this shard.
-Thus, there is an extended `delegate` method which you can access by
-including `RecursiveWrapper::Delegate`.
+The generic is wrapped in a new class with a name you specify as the first
+argument to `recursive_generic`. This class includes `GenericWrapper(...)`.
+If you are wrapping `Array` or `Hash`, all of the work of delegating methods
+from your new class to the wrapped generic is already done for you. Othewrise,
+you might have to write some delegation of methods from your new class to the
+wrapped generic.
+
+For *any* wrapped generic, all of the methods of `Iterable` and `Enumerable`,
+and `[]`, `[]?`, `[]=`, `clear`, `each`, and `size` are implemented for you.
+You will have to write delegation of additional methods of the wrapped generic
+which you intend to use. An extended `delegate` method is provided to make this
+trivial: you will mostly just have to invoke `delegate` for each method,
+rather the writing a method body.
+
+You need not implement the exhaustive API of the wrapped generic, but only
+the methods you intend to use.
+
+Most delegated methods will involve wrapping values in `ValueWrapper(Types)`
+or unwrapping the returned value. Thus, there is an extended `delegate`
+method which you can access by including `RecursiveWrapper::Delegate`.
 
 ```crystal
 macro delegate(method, to, wrap = nil, unwrap = nil, return result = nil, form = nil)
 ```
 
-Delegate a method. This has additional options over the normal version
-of `delegate`. It doesn't work with blocks.
+Delegate *method* to the object passed to *to*, with options as described
+below.
+
+#### Examples
+
+You won't have to write *these* specific examples, as they are already
+implemented for you in this shard. They are here to instruct you in how
+to support wrapping generics that aren't already supported in this shard.
+
+The user has used `recursive_generic` to create `MyRecursiveArray`, wrapping
+the `Array` generic type. The wrapped generic is always assigned to
+`@contained`. The code below delegates `Array#push`, wrapping the value in
+`ValueWrapper(Types)` and then passing it to the wrapped `Array`, and
+`Array#pop`, unwrapping the returned value.
+```crystal
+class MyRecursiveArray
+  delegate push, to: @contained, wrap: :value
+  delegate pop,  to: @contained, return: :unwrap
+end
+```
 
 ### Arguments
 
@@ -82,10 +117,10 @@ of `delegate`. It doesn't work with blocks.
 
   - **:key** or **:index** : wrap one positional (not named) argument in mutate_key().
 
-  - **:value** : wrap one positional argument in our value-wrapper struct.
+  - **:value** : wrap one positional argument in `ValueWrapper(Types)`.
 
   - **:key_value** : wrap two positional arguments. The first is wrapped in
-    mutate_key(), the second in our value-wrapper struct.
+    `#mutate_key()`, the second in `ValueWrapper(Types)`.
 
   - **:uwrap** : unwrap the first positional argument from our value-wrapper
     struct, by passing it as `argument.value`.

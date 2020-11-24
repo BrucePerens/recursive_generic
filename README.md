@@ -203,7 +203,7 @@ class MyRecursiveArray
 
   def map
     self.class.new(@contained.map do |data|
-      { ValueWrapper.new(yield data.value) }
+      ValueWrapper.new(yield data.value)
     end)
   end
 end

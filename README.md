@@ -29,17 +29,17 @@ implements the methods of `Comparable`.
 
 ### Arguments:
 
-name: The name of the new self-containing generic class to create.
+- **name:** The name of the new self-containing generic class to create.
 
-generic: The name of a generic class that our new one will be based upon.
+- **generic:** The name of a generic class that our new one will be based upon.
   This will be `Array`, `Hash`, etc.
 
-datatype: A tuple containing the type of data that will be stored in the
+- **datatype:** A tuple containing the type of data that will be stored in the
   generic. For an `Array` containing `Int32`, this would be `{ Int32 }`. For
   a `Hash` with `Symbol` typed keys and `String` typed values, this would be
   `{ Symbol, String }`.
 
-mutate_key: The name of a function that mutates the keys or indices
+- **mutate_key:** The name of a function that mutates the keys or indices
            in the wrapped generic, and the key or index values used
            to query the wrapped generic. It takes the given key or index as
            its argument, and returns the mutated key or index. So, for
@@ -51,7 +51,7 @@ mutate_key: The name of a function that mutates the keys or indices
            end
            ```
 
-mutate_value: The name of a function that mutates values as they are
+- **mutate_value:** The name of a function that mutates values as they are
            inserted in the generic. It takes the given value as
            its argument, and returns the mutated value. So, for example,
            this function would make all of the values strings as they
@@ -76,37 +76,39 @@ macro delegate(method, to, wrap = nil, unwrap = nil, return result = nil, form =
 Delegate a method. This has additional options over the normal version
 of `delegate`. It doesn't work with blocks.
 
-wrap: This named argument can be:
+### Arguments
 
-  :key or :index : wrap one positional (not named) argument in mutate_key().
+- **wrap:** This named argument can be:
 
-  :value : wrap one positional argument in our value-wrapper struct.
+  - **:key** or **:index** : wrap one positional (not named) argument in mutate_key().
 
-  :key_value : wrap two positional arguments. The first is wrapped in
+  - **:value** : wrap one positional argument in our value-wrapper struct.
+
+  - **:key_value** : wrap two positional arguments. The first is wrapped in
     mutate_key(), the second in our value-wrapper struct.
 
-  :uwrap : unwrap the first positional argument from our value-wrapper
+  - **:uwrap** : unwrap the first positional argument from our value-wrapper
     struct, by passing it as `argument.value`.
 
   The default is to pass on all arguments without modification.
   Named arguments are passed on without modification except when
   `form: :one_argument` is set (see below).
 
-return: This named argument can be:
+- **return:** This named argument can be:
 
-  :unwrap : unwrap the returned value from our value-wrapper struct.
+  - **:unwrap** : unwrap the returned value from our value-wrapper struct.
 
-  :self :   return `self`.
+  **:self** :   return `self`.
 
   The default is to return the unmodified value of the delegated method.
 
   (The method to declare keywords like `return` as argument names is
   documented under
-  https://crystal-lang.org/reference/syntax_and_semantics/default_values_named_arguments_splats_tuples_and_overloading.html#external-names )
+  <https://crystal-lang.org/reference/syntax_and_semantics/default_values_named_arguments_splats_tuples_and_overloading.html#external-names> )
 
-form: This named argument can be:
+- **form:** This named argument can be:
 
-  :one_argument : This is used when delegating the 
+  - **:one_argument** : This is used when delegating the 
     operators `==`, `===`, `<=`, `>=`, `<=>`, and `!=`. The compiler
     insists that they be declared with only one argument, while the
     normal method of delegation declares delegated methods with
@@ -150,16 +152,16 @@ TODO: Write development instructions here
 
 ## Contributors
 
-- [Bruce Perens](https://github.com/BrucePerens) - creator and maintainer.
+- [Bruce Perens](<bruce@perens.com>, <@BrucePerens> <https://github.com/BrucePerens>) - creator and maintainer.
 
 MIT license. Copyright (C) 2000 Algorithmic LLC. In addition, this may
 be a derivative work of the works cited below:
 
 Thanks for lessons from:
-* Ary Borenszweig (@asterite) explained the way to implement this
+* Ary Borenszweig (<@asterite>) explained the way to implement this
   in https://github.com/crystal-lang/crystal/issues/5155
-* Sijawusz Pur Rahnama (@sija) and his `any_hash` shard.
-* Johannes Müller (@straight-shoota) and his `crinja` shard.
+* Sijawusz Pur Rahnama (<@sija>) and his `any_hash` shard.
+* Johannes Müller (<@straight-shoota>) and his `crinja` shard.
 * The Crystal stdlib implementation of the wrapped types, for the API
   of the various generic classes.
 

@@ -69,7 +69,7 @@ have to write new ones for a generic that isn't yet supported by this shard.
 Thus, there is an extended `delegate` method which you can access by
 including `RecursiveWrapper::Delegate`.
 
-```
+```crystal
 macro delegate(method, to, wrap = nil, unwrap = nil, return result = nil, form = nil)
 ```
 

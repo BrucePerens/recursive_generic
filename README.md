@@ -65,12 +65,15 @@ implements the methods of `Comparable`.
 
 ## Writing Delegation for the Wrapped Generic
 
+If you are wrapping `Array` or `Hash`, you won't have to read this.
+
 The generic is wrapped in a new class with a name you specify as the first
 argument to `recursive_generic`. This class includes `GenericWrapper(...)`.
+
 If you are wrapping `Array` or `Hash`, all of the work of delegating methods
-from your new class to the wrapped generic is already done for you. Othewrise,
-you might have to write some delegation of methods from your new class to the
-wrapped generic.
+from your new class to the wrapped generic has already been done for you.
+Othewrise, you might have to write some delegation of methods from your new
+class to the wrapped generic.
 
 For *any* wrapped generic, all of the methods of `Iterable` and `Enumerable`,
 and `[]`, `[]?`, `[]=`, `clear`, `each`, and `size` are implemented for you.
@@ -90,7 +93,7 @@ macro delegate(method, to, wrap = nil, unwrap = nil, return result = nil, form =
 Delegate *method* to the object passed to *to*, with options as described
 below.
 
-#### Examples
+### Examples
 
 You won't have to write *these* specific examples, as they are already
 implemented for you in this shard. They are here to instruct you in how
@@ -108,6 +111,23 @@ class MyRecursiveArray
   delegate pop,  to: @contained, return: :unwrap
 end
 ```
+
+This actually generates this code for the user:
+```crystal
+class MyRecursiveArray
+  def push(*arguments, **named_arguments)
+    @contained.push(ValueWrapper(Types).new(arguments[0], **named_arguments)
+  end
+
+  def pop(*arguments, **named_arguments)
+    @contained.pop(*arguments, **named_arguments).value
+  end
+end
+```
+
+So, we can see from this example that wrapping a value means creating a new
+`ValueWrapper(Types)` to contain it, and extracting the wrapped value means
+calling `ValueWrapper(Types)#value`.
 
 ### Arguments
 
@@ -152,6 +172,25 @@ end
     pass on any named arguments.
 
     The default is that all arguments are passed on to the delegate method.
+
+### Delegating methods with blocks.
+
+Alas, the extended `delegate` method doesn't work for methods that expect
+to be passed a block. Thus, you must write those methods. Continuing the
+example above, this implements `Array#sort` for `MyRecursiveArray`, returning
+a new `MyRecursiveArray` instance containing the sorted class. We don't
+have to do anything about the fact that `Array#sort` is sorting
+`ValueWrapper(Types)` values rather than the types wrapped by `ValueWrapper`,
+since `ValueWrapper(Types)` already has a delegate for the `<=>` method
+used by `Array#sort`.
+
+```crystal
+class MyRecursiveArray
+  def sort
+    self.class.new(@contained.sort { yield })
+  end
+end
+```
 
 ## Installation
 

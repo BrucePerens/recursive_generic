@@ -65,16 +65,11 @@ implements the methods of `Comparable`.
 
 ## Writing Delegation for the Wrapped Generic
 
-*If you are wrapping `Array` or `Hash`, you won't have to read this. All of the
-work below has been done for you.*
+*If you are wrapping `Array` or `Hash`, containing any type, you won't have
+to read this. All of the work below has already been done for you.* 
 
 The generic is wrapped in a new class with a name you specify as the first
 argument to `recursive_generic`. This class includes `GenericWrapper(...)`.
-
-If you are wrapping `Array` or `Hash`, all of the work of delegating methods
-from your new class to the wrapped generic has already been done for you.
-Othewrise, you might have to write some delegation of methods from your new
-class to the wrapped generic.
 
 For *any* wrapped generic, all of the methods of `Iterable` and `Enumerable`,
 and `[]`, `[]?`, `[]=`, `clear`, `each`, and `size` are implemented for you.

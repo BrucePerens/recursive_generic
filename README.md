@@ -114,7 +114,7 @@ This actually generates this code for the user:
 ```crystal
 class MyRecursiveArray
   def push(*arguments, **named_arguments)
-    @contained.push(ValueWrapper.new(arguments[0], **named_arguments)
+    @contained.push(ValueWrapper.new(arguments[0]), **named_arguments)
   end
 
   def pop(*arguments, **named_arguments)

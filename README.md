@@ -30,6 +30,8 @@ implements the methods of `Comparable`.
 
 ### Arguments:
 
+recursive_generic(*name*, *generic*, *datatype*, *mutate_key*=no-operation, *mutate_value*=no-operation)
+
 - **name:** The name of the new self-containing generic class to create.
 
 - **generic:** The name of a generic class that our new one will be based upon.
@@ -83,7 +85,7 @@ or unwrapping the returned value. Thus, there is an extended `delegate`
 method which you can access by including `RecursiveWrapper::Delegate`.
 
 ```crystal
-macro delegate(method, to, wrap = nil, unwrap = nil, return result = nil, form = nil)
+macro delegate(method, to, wrap = nil, return = nil, form = nil)
 ```
 
 Delegate *method* to the object passed to *to*, with options as described
@@ -128,6 +130,7 @@ a way to write this quickly, consistently, and readably.
 
 ### Arguments
 
+delegate(*method*, *to*, *wrap*=nil, *return*=nil, *form*=nil)
 - **wrap:** This named argument can be:
 
   - **:key** or **:index** : wrap one positional (not named) argument in mutate_key().

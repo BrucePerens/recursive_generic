@@ -156,9 +156,15 @@ a way to write this quickly, consistently, and readably.
 
 - **return:** This named argument can be:
 
-  - **:unwrap** : unwrap the returned value from our value-wrapper struct.
+  - **:unwrap** : Unwrap the returned value from our value-wrapper struct.
 
-  - **:self** :   return `self`.
+  - **:self** :   Return `self`.
+
+  - **:new** :    Create a new instance of the current object to wrap the
+    returned value, and return that. For example, this delegates Array#&
+    ```crystal
+    delegate &, to: @contained, wrap: :unwrap, return: :new
+    ```
 
   The default is to return the unmodified value returned by the delegated
   method.

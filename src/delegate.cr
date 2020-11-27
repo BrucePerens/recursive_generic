@@ -1,4 +1,15 @@
 module RecursiveGeneric::Delegate(ValueWrapper)
+  def unwrap(o)
+    case o
+    when WrappedValue
+      o.value
+    when GenericWrapper
+      o.contained
+    else
+      o
+    end
+  end
+
   # Delegate a method. This has additional options over the normal version
   # of `delegate`. It doesn't work with blocks.
   #
@@ -14,8 +25,10 @@ module RecursiveGeneric::Delegate(ValueWrapper)
   #   `form: :one_argument` is set (see below).
   #
   # - return: This named argument can be:
-  #   :unwrap : unwrap the returned value from our value-wrapper struct.
-  #   :self :   return `self`.
+  #   - :unwrap : unwrap the returned value from our value-wrapper struct.
+  #   - :self :   return `self`.
+  #   - :new :    create a new `GenericWrapper(...)` to wrap the return value,
+  #             and return that.
   #   The default is to return the unmodified value of the delegated method.
 
   #   (The method to declare keywords like `return` as argument names is
@@ -50,15 +63,17 @@ module RecursiveGeneric::Delegate(ValueWrapper)
       {% elsif wrap == :key_value || wrap == :index_value %}
         value = {{to.id}}.{{method.id}}(mutate_key(args[0]), ValueWrapper.new(args[1]), **named_args)
       {% elsif wrap == :unwrap %}
-        value = {{to.id}}.{{method.id}}(args[0].value, **named_args)
+        value = {{to.id}}.{{method.id}}(unwrap(args[0]), **named_args)
       {% else %}
         value = {{to.id}}.{{method.id}}(*args, **named_args)
       {% end %}
 
       {% if result == :unwrap %}
-        value.value
+        unwrap(value)
       {% elsif result == :self %}
         self
+      {% elsif result == :new %}
+        self.class.new(value)
       {% else %}
         value
       {% end %}

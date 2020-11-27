@@ -1,4 +1,5 @@
 class Object
+  # Return the instance methods of an Object.
   def self.instance_methods
     {% begin %}
     [
